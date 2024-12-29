@@ -20,7 +20,7 @@ A light wrapper around HuggingFace's Transformers Python library, with very litt
 using HuggingFaceTransformers
 
 tokenizer = from_pretrained(AutoTokenizer, "HuggingFaceTB/SmolLM2-135M");
-model = from_pretrained(Transformer, "HuggingFaceTB/SmolLM2-135M");
+model = from_pretrained(CausalLM, "HuggingFaceTB/SmolLM2-135M");
 
 generate(
     model,
@@ -51,7 +51,7 @@ println(decode(tokenizer, gen))
 Using "chat templates" for instruct models:
 
 ```julia
-model = from_pretrained(Transformer, "HuggingFaceTB/SmolLM2-1.7B-Instruct");
+model = from_pretrained(CausalLM, "HuggingFaceTB/SmolLM2-1.7B-Instruct");
 tokenizer = from_pretrained(AutoTokenizer, "HuggingFaceTB/SmolLM2-1.7B-Instruct")
 prompt = "May a moody baby doom a yam?"
 
@@ -73,4 +73,27 @@ gen = generate(
     pad_token_id=encode(tokenizer, "<|endoftext|>")[1]
 );
 println(decode(tokenizer, gen, skip_special_tokens=true));
+```
+
+## Other models
+
+This also works with other kinds of models, but you sometimes have to get a bit closer to the Python.
+
+This is a HuggingFace port of [ESM-C](https://huggingface.co/Synthyra/ESMplusplus_large), a protein language model:
+
+```julia
+model = from_pretrained(Model, "Synthyra/ESMplusplus_large", trust_remote_code=true)
+#Note the tokenizer loads differently - directly from the model.
+tokenizer = AutoTokenizer(model.py_transformer.tokenizer)
+
+#We can run this using the provided encode wrapper for a signle sequnece (where toks is a Julia Array):
+toks = encode(tokenizer, "MPRTEIN");
+o = model(toks)
+#tensor will detach the PyTorch tensor, and convert it to a Julia array.
+tensor(o.last_hidden_state)
+
+#...but if you want to batch, you need to use the Python tokenizer directly:
+pytoks = tokenizer.py_tokenizer(("MPRTEIN","MSEQWENCE"), padding=true, return_tensors="pt");
+o = model(pytoks.input_ids);
+tensor(o.last_hidden_state)
 ```
