@@ -1,0 +1,5 @@
+[deps]
+numpy = "1.26.4"
+pytorch = {channel = "pytorch"}
+torchvision = {channel = "pytorch"}
+transformers = {channel = "conda-forge"}

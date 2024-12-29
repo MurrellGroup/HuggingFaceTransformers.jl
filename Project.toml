@@ -3,8 +3,14 @@ uuid = "a35c7971-d05f-4fd8-a0e9-a051a316e216"
 authors = ["murrellb <murrellb@gmail.com> and contributors"]
 version = "1.0.0-DEV"
 
+[deps]
+HuggingFaceTokenizers = "a6888d44-1185-43bb-bd0f-7806f9976d18"
+PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
+
 [compat]
-julia = "1.9"
+HuggingFaceTokenizers = "0.1.0"
+PythonCall = "0.9"
+julia = "1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
