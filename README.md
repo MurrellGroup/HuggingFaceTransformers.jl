@@ -11,7 +11,7 @@ A light wrapper around HuggingFace's Transformers Python library, with very litt
 ## Installation:
 
 ```julia
-] add HuggingFaceTransformers
+] add https://github.com/MurrellGroup/HuggingFaceTransformers.jl
 ```
 
 ## Usage:
